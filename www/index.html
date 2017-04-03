@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>MHM Client</title>
+
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components-blue-basic-theme.css">
+
+    <script src="lib/onsen/js/angular/angular.js"></script>
+    <script src="lib/onsen/js/angular/checklist-model.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+
+    <script src="cordova.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body ng-controller="AppController">
+
+<!-- 各親ページのnavigatorを定義 -->
+<ons-template id="index.html">
+    <ons-navigator var="myNavigator" page="home.html"></ons-navigator>
+</ons-template>
+
+<ons-template id="entry_top.html">
+    <ons-navigator var="myNavigator" page="entry_record.html"></ons-navigator>
+</ons-template>
+
+<!-- Home画面　index > home -->
+<ons-template id="home.html">
+    <ons-page ng-controller="HomeController as home" id="home">
+    
+        <ons-toolbar>
+            <div class="center">MHM Client</div>
+        </ons-toolbar>
+
+        <div class="profile-card">
+        </div>
+        <ons-button onclick="myNavigator.pushPage('entry_record.html')">entry</ons-button>
+
+    </ons-page>
+</ons-template>
+
+
+<ons-template id="entry_record.html">
+    <ons-page ng-controller="EntryController" id="entry_record">
+
+      <ons-toolbar>
+        <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="center">Add Record</div>
+      </ons-toolbar>
+        
+        <ons-list>
+            <ons-list-item>
+                <label for="entry_sf_title" class="input_title">title</label>                    
+                <input type="text" class="text-input" ng-model="sf_title" id="entry_sf_title" placeholder="here input title">
+            </ons-list-item>
+
+            <ons-list-item>
+                <label for="entry_sf_date" class="input_title">date</label>
+                <input type="date" class="text-input" ng-model="sf_date" id="entry_sf_date">
+            </ons-list-item>
+
+            <!--
+            画像入力エリア
+            -->
+
+            <ons-list-item>
+                <ons-row>
+                    <ons-col>
+                        <label for="entry_sf_picture">img</label>
+                    </ons-col>
+                    <ons-col>
+                        <ons-button id="entry_sf_picture" ng-click="showPictureSelect()">選択</ons-button>
+                        <span id="tsid"></span>
+                        <img ng-src="{{image_url}}">
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
+            <ons-list-item>
+                <label for="entry_sf_comment" class="input_title">comment</label>
+                <textarea type="text" class="textarea" ng-model="comment" id="entry_sf_comment"　placeholder="today is a good day" /></textarea>
+            </ons-list-item>
+
+        </ons-list>
+
+        <button class="button button--large" style="display: {{visibility.btn_entry}};" ng-click="entryRecord()">entry</button>
+
+    </ons-page>
+</ons-template>
+
+<!-- 共通リスト項目選択ページ -->
+<ons-template id="list_select_page.html">
+    <ons-page ng-controller="SelectListController">
+
+      <ons-toolbar>
+        <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="center">Select</div>
+        <div class="right">
+          <ons-toolbar-button><ons-icon icon="ion-gear-a" style="vertical-align: -4px; font-size: 28px;"></ons-icon></ons-toolbar-button>
+        </div>
+      </ons-toolbar>
+
+        <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="processItemSelect($index)">
+            <ons-row>
+                <ons-col class="{{}}">
+                    <p class="item-desc">{{item.key}}</p>
+                </ons-col>
+                <ons-col class="{{}}">
+                    <p class="item-desc">{{item.value}}</p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+
+    </ons-page>
+</ons-template>
+
+</body>
+</html>
