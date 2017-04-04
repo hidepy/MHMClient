@@ -14,20 +14,15 @@
     <script src="lib/onsen/js/angular/checklist-model.js"></script>
     <script src="lib/onsen/js/onsenui.js"></script>
 
+<!--
     <script src="cordova.js"></script>
+-->
     <script src="js/app.js"></script>
 </head>
 
 <body ng-controller="AppController">
 
-<!-- 各親ページのnavigatorを定義 -->
-<ons-template id="index.html">
-    <ons-navigator var="myNavigator" page="home.html"></ons-navigator>
-</ons-template>
-
-<ons-template id="entry_top.html">
-    <ons-navigator var="myNavigator" page="entry_record.html"></ons-navigator>
-</ons-template>
+<ons-navigator title="Navigator" var="myNavigator" page="home.html"></ons-navigator>
 
 <!-- Home画面　index > home -->
 <ons-template id="home.html">
@@ -36,6 +31,8 @@
         <ons-toolbar>
             <div class="center">MHM Client</div>
         </ons-toolbar>
+
+top screen
 
         <div class="profile-card">
         </div>
@@ -54,36 +51,21 @@
       </ons-toolbar>
         
         <ons-list>
-            <ons-list-item>
-                <label for="entry_sf_title" class="input_title">title</label>                    
-                <input type="text" class="text-input" ng-model="sf_title" id="entry_sf_title" placeholder="here input title">
+            <ons-list-item>                    
+                <input type="text" class="text-input" ng-model="mhm_title" id="entry_sf_title" placeholder="here input title">
             </ons-list-item>
-
-            <ons-list-item>
-                <label for="entry_sf_date" class="input_title">date</label>
-                <input type="date" class="text-input" ng-model="sf_date" id="entry_sf_date">
-            </ons-list-item>
-
-            <!--
-            画像入力エリア
-            -->
 
             <ons-list-item>
                 <ons-row>
                     <ons-col>
-                        <label for="entry_sf_picture">img</label>
-                    </ons-col>
-                    <ons-col>
-                        <ons-button id="entry_sf_picture" ng-click="showPictureSelect()">選択</ons-button>
-                        <span id="tsid"></span>
+                        <ons-button id="entry_sf_picture" ng-click="showPictureSelect()">select</ons-button>
                         <img ng-src="{{image_url}}">
                     </ons-col>
                 </ons-row>
             </ons-list-item>
 
             <ons-list-item>
-                <label for="entry_sf_comment" class="input_title">comment</label>
-                <textarea type="text" class="textarea" ng-model="comment" id="entry_sf_comment"　placeholder="today is a good day" /></textarea>
+                <textarea type="text" class="textarea" ng-model="comment" id="mhm_comment"　placeholder="today is a good day" /></textarea>
             </ons-list-item>
 
         </ons-list>

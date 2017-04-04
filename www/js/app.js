@@ -1,30 +1,25 @@
 (function(){
     'use strict';
-    var module = angular.module('app', ['onsen','checklist-model']);
-    var storage_manager = new StorageManager("SOFTCREAM_COLLECTION_LIST");
+    var module = angular.module('app', ['onsen']);
 
+    module.controller('AppController', function($scope) {
 
-    module.controller('AppController', function($scope, $data) {
-        $scope.doSomething = function() {
-            setTimeout(function() {
-                alert('tappaed');
-            }, 100);
-        };
     });
 
     module.controller("HomeController", function(){
 
     });
 
+    module.controller('EntryController', function($scope, selectList, DataSendService) {
 
-    module.controller('EntryController', function($scope, selectList) {
-
+        $scope.mhm_title = "";
+        $scope.mhm_comment = "";
         $scope.image_url = "";
 
         var _args = myNavigator.getCurrentPage().options;
 
 
-        //写真選択
+        //picture 選択
         $scope.showPictureSelect = function(){
 
             navigator.camera.getPicture(
@@ -40,22 +35,27 @@
                     sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM
                 }
             );
-
-
         };
-
 
         //登録ボタン
         $scope.entryRecord = function(){
             
-            
+            var text_info = {
+
+            };
+
+            DataSendService.sendData(text_info, $scope.image_url)
+                .then(function(){
+                    alert("all process complete!!");
+                })
+                .catch(function(e){
+                    alert("process failure...");
+                    console.log(e);
+                });
         }
 
         // リスト選択イベント受け取り
         $scope.$on("listSelected", function(e, param){
-
-            //$scope.selected_bike = item.value;
-
             switch(param.parent_option.title){
                 case "flavor_group":
                     $scope.sf_selected_flavor_group = param.item.value;
@@ -80,6 +80,42 @@
             // イベント通知
             $rootScope.$broadcast("listSelected", {parent_option: nav_options, item: selectedItem});
         }
+    });
+
+    // 
+    module.service("DataSendService", function($http){
+        this.sendData = function(text_info, image_url){
+            var host = "http://tasokori.net/";
+            return this.sendTextData(host, text_info)
+                .then(function(){
+                    return this.sendImgData(
+                        host,
+                        image_url
+                    );
+                });
+        };
+        this.sendTextData = function(host, text_info){
+            return $http.post(host, text_info)
+                // 戻りはpromiseオブジェクトなんで
+                .then(function(response_wrapper){
+                    return response_wrapper.return_cd;
+                });
+        };
+        this.sendImgData = function(host, image_url){
+            return new Promise(function(resolve, reject){
+                var options = new FileUploadoptions();
+                options["fileName"] = "mytestjpegimg.jpg";
+
+                var ft = new FileTransfer();
+                ft.upload(
+                    image_url, 
+                    encodeURI(host), 
+                    resolve,
+                    reject,
+                    options
+                );
+            });
+        };
     });
 
     module.service("selectList", function(){
